@@ -181,5 +181,6 @@ export const portfolioData = {
   "footer": {
     "text": "SHISHIRADHIKARI",
     "year": "2025"
-  }
+  },
+  "adminPassword": "shishir@admin"
 };

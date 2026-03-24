@@ -10,6 +10,12 @@ export default function AdminPanel() {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
+  const [forgotMode, setForgotMode] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [sendingOtp, setSendingOtp] = useState(false);
+  const [forgotMsg, setForgotMsg] = useState("");
 
   const [activeTab, setActiveTab] = useState("hero");
   const [data, setData] = useState<PortfolioData>(
@@ -67,60 +73,167 @@ export default function AdminPanel() {
         minHeight: "100vh", background: "#0a0a0a", display: "flex",
         alignItems: "center", justifyContent: "center", fontFamily: "'Poppins', sans-serif",
       }}>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setLoggingIn(true);
-            setLoginError("");
-            if (password === "shishir@admin") {
-              setAuthed(true);
-            } else {
-              setLoginError("Wrong password");
-            }
-            setLoggingIn(false);
-          }}
-          style={{
+        <div style={{
             background: "#111", border: "1px solid #1a1a1a", borderRadius: 12,
             padding: "40px 36px", width: 380, textAlign: "center",
-          }}
-        >
+          }}>
           <div style={{
             width: 48, height: 48, background: "#38bdf8", borderRadius: "50%",
             margin: "0 auto 20px", display: "flex", alignItems: "center", justifyContent: "center",
           }}>
-            <span style={{ fontSize: 22 }}>&#128274;</span>
+            <span style={{ fontSize: 22 }}>{forgotMode ? "\u2709" : "\uD83D\uDD12"}</span>
           </div>
-          <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Admin Access</h2>
-          <p style={{ color: "#888", fontSize: 14, marginBottom: 24 }}>Enter password to continue</p>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            autoFocus
-            style={{
-              width: "100%", padding: "12px 16px", background: "#0a0a0a",
-              border: loginError ? "1px solid #ef4444" : "1px solid #1a1a1a",
-              borderRadius: 8, color: "#fff", fontSize: 14, outline: "none",
-              boxSizing: "border-box", marginBottom: 8,
-            }}
-          />
-          {loginError && (
-            <p style={{ color: "#ef4444", fontSize: 13, marginBottom: 8, textAlign: "left" }}>{loginError}</p>
+
+          {!forgotMode ? (
+            /* --- LOGIN --- */
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              setLoggingIn(true);
+              setLoginError("");
+              if (password === data.adminPassword) {
+                setAuthed(true);
+              } else {
+                setLoginError("Wrong password");
+              }
+              setLoggingIn(false);
+            }}>
+              <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Admin Access</h2>
+              <p style={{ color: "#888", fontSize: 14, marginBottom: 24 }}>Enter password to continue</p>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                autoFocus
+                style={{
+                  width: "100%", padding: "12px 16px", background: "#0a0a0a",
+                  border: loginError ? "1px solid #ef4444" : "1px solid #1a1a1a",
+                  borderRadius: 8, color: "#fff", fontSize: 14, outline: "none",
+                  boxSizing: "border-box", marginBottom: 8,
+                }}
+              />
+              {loginError && (
+                <p style={{ color: "#ef4444", fontSize: 13, marginBottom: 8, textAlign: "left" }}>{loginError}</p>
+              )}
+              <button
+                type="submit"
+                disabled={loggingIn}
+                style={{
+                  width: "100%", padding: "12px 0", background: "#38bdf8", color: "#000",
+                  border: "none", borderRadius: 8, fontWeight: 600, fontSize: 14,
+                  cursor: loggingIn ? "wait" : "pointer", marginTop: 8,
+                  opacity: loggingIn ? 0.6 : 1,
+                }}
+              >
+                {loggingIn ? "Verifying..." : "Login"}
+              </button>
+              <p
+                onClick={() => { setForgotMode(true); setLoginError(""); setOtpSent(false); setForgotMsg(""); }}
+                style={{ color: "#38bdf8", fontSize: 13, marginTop: 16, cursor: "pointer" }}
+              >
+                Forgot password?
+              </p>
+            </form>
+          ) : !otpSent ? (
+            /* --- SEND OTP --- */
+            <div>
+              <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Reset Password</h2>
+              <p style={{ color: "#888", fontSize: 14, marginBottom: 24 }}>
+                A verification code will be sent to your email
+              </p>
+              <p style={{ color: "#555", fontSize: 13, marginBottom: 16 }}>
+                s****r.adhikari119@gmail.com
+              </p>
+              {forgotMsg && (
+                <p style={{ color: "#ef4444", fontSize: 13, marginBottom: 8 }}>{forgotMsg}</p>
+              )}
+              <button
+                disabled={sendingOtp}
+                onClick={async () => {
+                  setSendingOtp(true);
+                  setForgotMsg("");
+                  const code = Math.floor(100000 + Math.random() * 900000).toString();
+                  setGeneratedOtp(code);
+                  try {
+                    const emailjs = await import("@emailjs/browser");
+                    await emailjs.send("shishiradk", "shishira", {
+                      from_name: "Portfolio Admin",
+                      from_email: "noreply@portfolio.com",
+                      message: `Your admin verification code is: ${code}`,
+                      to_email: "shishir.adhikari119@gmail.com",
+                    }, "UHpytVLyxh82_ayhq");
+                    setOtpSent(true);
+                  } catch {
+                    setForgotMsg("Failed to send code. Try again.");
+                  }
+                  setSendingOtp(false);
+                }}
+                style={{
+                  width: "100%", padding: "12px 0", background: "#38bdf8", color: "#000",
+                  border: "none", borderRadius: 8, fontWeight: 600, fontSize: 14,
+                  cursor: sendingOtp ? "wait" : "pointer", opacity: sendingOtp ? 0.6 : 1,
+                }}
+              >
+                {sendingOtp ? "Sending..." : "Send Verification Code"}
+              </button>
+              <p
+                onClick={() => { setForgotMode(false); setForgotMsg(""); }}
+                style={{ color: "#888", fontSize: 13, marginTop: 16, cursor: "pointer" }}
+              >
+                Back to login
+              </p>
+            </div>
+          ) : (
+            /* --- VERIFY OTP --- */
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              if (otp === generatedOtp) {
+                setAuthed(true);
+                setForgotMode(false);
+              } else {
+                setForgotMsg("Invalid code. Try again.");
+              }
+            }}>
+              <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Enter Code</h2>
+              <p style={{ color: "#888", fontSize: 14, marginBottom: 24 }}>
+                Check your email for the 6-digit code
+              </p>
+              <input
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                placeholder="000000"
+                maxLength={6}
+                autoFocus
+                style={{
+                  width: "100%", padding: "12px 16px", background: "#0a0a0a",
+                  border: "1px solid #1a1a1a", borderRadius: 8, color: "#fff",
+                  fontSize: 20, outline: "none", boxSizing: "border-box",
+                  textAlign: "center", letterSpacing: 8, marginBottom: 8,
+                }}
+              />
+              {forgotMsg && (
+                <p style={{ color: "#ef4444", fontSize: 13, marginBottom: 8 }}>{forgotMsg}</p>
+              )}
+              <button
+                type="submit"
+                style={{
+                  width: "100%", padding: "12px 0", background: "#38bdf8", color: "#000",
+                  border: "none", borderRadius: 8, fontWeight: 600, fontSize: 14,
+                  cursor: "pointer", marginTop: 8,
+                }}
+              >
+                Verify & Login
+              </button>
+              <p
+                onClick={() => { setOtpSent(false); setOtp(""); setForgotMsg(""); }}
+                style={{ color: "#888", fontSize: 13, marginTop: 16, cursor: "pointer" }}
+              >
+                Resend code
+              </p>
+            </form>
           )}
-          <button
-            type="submit"
-            disabled={loggingIn}
-            style={{
-              width: "100%", padding: "12px 0", background: "#38bdf8", color: "#000",
-              border: "none", borderRadius: 8, fontWeight: 600, fontSize: 14,
-              cursor: loggingIn ? "wait" : "pointer", marginTop: 8,
-              opacity: loggingIn ? 0.6 : 1,
-            }}
-          >
-            {loggingIn ? "Verifying..." : "Login"}
-          </button>
-        </form>
+        </div>
       </div>
     );
   }
@@ -356,6 +469,10 @@ export default function AdminPanel() {
               <Input value={data.footer.text} onChange={(v) => setData({ ...data, footer: { ...data.footer, text: v } })} />
               <Label>Footer Year</Label>
               <Input value={data.footer.year} onChange={(v) => setData({ ...data, footer: { ...data.footer, year: v } })} />
+              <Divider />
+              <SubTitle>Admin Password</SubTitle>
+              <Input value={data.adminPassword} onChange={(v) => setData({ ...data, adminPassword: v })} placeholder="Admin password" />
+              <p style={{ color: "#888", fontSize: 12, marginTop: 6 }}>Change your admin password here. Save to apply.</p>
               <SaveBtn saving={saving} onClick={() => save(data)} />
             </div>
           )}
@@ -365,7 +482,7 @@ export default function AdminPanel() {
       {/* Toast */}
       {toast && (
         <div style={{
-          position: "fixed", bottom: 24, right: 24, background: toast === "Saved!" ? "#38bdf8" : "#ef4444",
+          position: "fixed", bottom: 24, right: 24, background: toast.startsWith("Downloaded") ? "#38bdf8" : "#ef4444",
           color: "#000", padding: "10px 20px", borderRadius: 8, fontWeight: 600, fontSize: 14, zIndex: 999,
         }}>
           {toast}
