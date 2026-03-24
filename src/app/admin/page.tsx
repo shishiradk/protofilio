@@ -45,25 +45,20 @@ export default function AdminPanel() {
     { id: "general", label: "General" },
   ];
 
-  const save = async (d: PortfolioData) => {
+  const save = (d: PortfolioData) => {
     setSaving(true);
-    try {
-      const res = await fetch("/api/portfolio", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(d),
-      });
-      if (res.ok) {
-        setToast("Saved!");
-        setData(d);
-      } else {
-        setToast("Save failed");
-      }
-    } catch {
-      setToast("Save failed");
-    }
+    setData(d);
+    const content = `export const portfolioData = ${JSON.stringify(d, null, 2)};\n`;
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "portfolio.ts";
+    a.click();
+    URL.revokeObjectURL(url);
+    setToast("Downloaded! Replace src/data/portfolio.ts and redeploy.");
     setSaving(false);
-    setTimeout(() => setToast(""), 2000);
+    setTimeout(() => setToast(""), 4000);
   };
 
   if (!authed) {
@@ -73,24 +68,14 @@ export default function AdminPanel() {
         alignItems: "center", justifyContent: "center", fontFamily: "'Poppins', sans-serif",
       }}>
         <form
-          onSubmit={async (e) => {
+          onSubmit={(e) => {
             e.preventDefault();
             setLoggingIn(true);
             setLoginError("");
-            try {
-              const res = await fetch("/api/auth", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ password }),
-              });
-              const json = await res.json();
-              if (json.ok) {
-                setAuthed(true);
-              } else {
-                setLoginError("Wrong password");
-              }
-            } catch {
-              setLoginError("Connection error");
+            if (password === "shishir@admin") {
+              setAuthed(true);
+            } else {
+              setLoginError("Wrong password");
             }
             setLoggingIn(false);
           }}
