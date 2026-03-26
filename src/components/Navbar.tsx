@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { portfolioData } from "@/data/portfolio";
+import { usePortfolio } from "@/context/PortfolioContext";
 
 export default function Navbar() {
   const [isVertical, setIsVertical] = useState(false);
-  const items = portfolioData.navbar;
+  const items = usePortfolio().navbar;
 
   useEffect(() => {
     const handleScroll = () => {

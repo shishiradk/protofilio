@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { portfolioData } from "@/data/portfolio";
-
-type PortfolioData = typeof portfolioData;
+import { useState, useEffect } from "react";
+import type { PortfolioData } from "@/types/portfolio";
 
 export default function AdminPanel() {
   const [authed, setAuthed] = useState(false);
@@ -18,11 +16,17 @@ export default function AdminPanel() {
   const [forgotMsg, setForgotMsg] = useState("");
 
   const [activeTab, setActiveTab] = useState("hero");
-  const [data, setData] = useState<PortfolioData>(
-    JSON.parse(JSON.stringify(portfolioData))
-  );
+  const [data, setData] = useState<PortfolioData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState("");
+
+  useEffect(() => {
+    fetch("/api/portfolio")
+      .then((res) => res.json())
+      .then((d) => { setData(d); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
 
   const [expRole, setExpRole] = useState("");
   const [expCompany, setExpCompany] = useState("");
@@ -51,21 +55,38 @@ export default function AdminPanel() {
     { id: "general", label: "General" },
   ];
 
-  const save = (d: PortfolioData) => {
+  const save = async (d: PortfolioData) => {
     setSaving(true);
     setData(d);
-    const content = `export const portfolioData = ${JSON.stringify(d, null, 2)};\n`;
-    const blob = new Blob([content], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "portfolio.ts";
-    a.click();
-    URL.revokeObjectURL(url);
-    setToast("Downloaded! Replace src/data/portfolio.ts and redeploy.");
+    try {
+      const res = await fetch("/api/portfolio", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(d),
+      });
+      const json = await res.json();
+      if (json.ok) {
+        setToast("Saved successfully!");
+      } else {
+        setToast("Error saving: " + (json.error || "Unknown error"));
+      }
+    } catch {
+      setToast("Error saving. Please try again.");
+    }
     setSaving(false);
     setTimeout(() => setToast(""), 4000);
   };
+
+  if (loading || !data) {
+    return (
+      <div style={{
+        minHeight: "100vh", background: "#0a0a0a", display: "flex",
+        alignItems: "center", justifyContent: "center", fontFamily: "'Poppins', sans-serif",
+      }}>
+        <p style={{ color: "#888", fontSize: 14 }}>Loading...</p>
+      </div>
+    );
+  }
 
   if (!authed) {
     return (
@@ -482,7 +503,7 @@ export default function AdminPanel() {
       {/* Toast */}
       {toast && (
         <div style={{
-          position: "fixed", bottom: 24, right: 24, background: toast.startsWith("Downloaded") ? "#38bdf8" : "#ef4444",
+          position: "fixed", bottom: 24, right: 24, background: toast.startsWith("Saved") ? "#38bdf8" : "#ef4444",
           color: "#000", padding: "10px 20px", borderRadius: 8, fontWeight: 600, fontSize: 14, zIndex: 999,
         }}>
           {toast}

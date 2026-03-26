@@ -1,9 +1,9 @@
 "use client";
 
-import { portfolioData } from "@/data/portfolio";
+import { usePortfolio } from "@/context/PortfolioContext";
 
 export default function HireBox() {
-  const hire = portfolioData.hire;
+  const hire = usePortfolio().hire;
   if (!hire.visible) return null;
 
   return (

@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { portfolioData } from "@/data/portfolio";
+import { usePortfolio } from "@/context/PortfolioContext";
 
 export default function Hero() {
-  const hero = portfolioData.hero;
+  const hero = usePortfolio().hero;
 
   return (
     <section

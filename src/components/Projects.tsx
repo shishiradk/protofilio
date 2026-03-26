@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { portfolioData } from "@/data/portfolio";
+import { usePortfolio } from "@/context/PortfolioContext";
 
 export default function Projects() {
   const [expanded, setExpanded] = useState(false);
-  const projects = portfolioData.projects;
+  const projects = usePortfolio().projects;
   const visibleCount = 6;
 
   const visibleProjects = expanded ? projects : projects.slice(0, visibleCount);

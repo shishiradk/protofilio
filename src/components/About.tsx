@@ -1,11 +1,12 @@
 "use client";
 
-import { portfolioData } from "@/data/portfolio";
+import { usePortfolio } from "@/context/PortfolioContext";
 
 export default function About() {
-  const about = portfolioData.about;
-  const skills = portfolioData.skills;
-  const experience = portfolioData.experience;
+  const data = usePortfolio();
+  const about = data.about;
+  const skills = data.skills;
+  const experience = data.experience;
 
   return (
     <section

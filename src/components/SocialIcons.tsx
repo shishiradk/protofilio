@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { portfolioData } from "@/data/portfolio";
+import { usePortfolio } from "@/context/PortfolioContext";
 
 const socialIconMap: Record<string, string> = {
   linkedin: "fab fa-linkedin",
@@ -12,7 +12,7 @@ const socialIconMap: Record<string, string> = {
 
 export default function SocialIcons() {
   const [visible, setVisible] = useState(true);
-  const socials = portfolioData.socials;
+  const socials = usePortfolio().socials;
 
   useEffect(() => {
     const handleScroll = () => {

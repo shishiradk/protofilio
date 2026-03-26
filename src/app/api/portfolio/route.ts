@@ -1,14 +1,21 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { getPortfolioData, savePortfolioData } from "@/lib/data";
+import { revalidatePath } from "next/cache";
 
-const DATA_PATH = path.join(process.cwd(), "src/data/portfolio.ts");
+export async function GET() {
+  try {
+    const data = getPortfolioData();
+    return NextResponse.json(data);
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
+  }
+}
 
 export async function POST(req: Request) {
   try {
     const data = await req.json();
-    const content = `export const portfolioData = ${JSON.stringify(data, null, 2)};\n`;
-    fs.writeFileSync(DATA_PATH, content, "utf-8");
+    savePortfolioData(data);
+    revalidatePath("/");
     return NextResponse.json({ ok: true });
   } catch (err) {
     return NextResponse.json(

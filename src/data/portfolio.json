@@ -1,4 +1,4 @@
-export const portfolioData = {
+{
   "navbar": [
     {
       "text": "Home",
@@ -183,4 +183,4 @@ export const portfolioData = {
     "year": "2025"
   },
   "adminPassword": "shishir@admin"
-};
+}

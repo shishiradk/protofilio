@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { portfolioData } from "@/data/portfolio";
+import { usePortfolio } from "@/context/PortfolioContext";
 
 const socialIconMap: Record<string, string> = {
   linkedin: "fab fa-linkedin",
@@ -14,7 +14,7 @@ export default function Contact() {
   const [toast, setToast] = useState(false);
   const [sending, setSending] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
-  const socials = portfolioData.socials;
+  const socials = usePortfolio().socials;
   const socialEntries = Object.entries(socials).filter(([, url]) => url);
 
   const handleSubmit = async (e: React.FormEvent) => {
