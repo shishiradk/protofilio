@@ -6,6 +6,7 @@ import { usePortfolio } from "@/context/PortfolioContext";
 const socialIconMap: Record<string, string> = {
   linkedin: "fab fa-linkedin",
   github: "fab fa-github",
+  upwork: "fas fa-briefcase",
   twitter: "fab fa-twitter",
   instagram: "fab fa-instagram",
 };

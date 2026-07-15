@@ -19,7 +19,7 @@ export default function DateTime() {
 
   return (
     <div
-      className="fixed right-4 md:right-5 bottom-4 md:bottom-5 bg-[var(--card-bg)]
+      className="hidden sm:block fixed right-4 md:right-5 bottom-4 md:bottom-5 bg-[var(--card-bg)]
         px-3.5 py-2.5 rounded-lg border border-[var(--border)] z-[120]"
     >
       <span className="text-lg font-semibold text-white block">

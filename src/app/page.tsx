@@ -6,6 +6,7 @@ import DateTime from "@/components/DateTime";
 import SocialIcons from "@/components/SocialIcons";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
+import Education from "@/components/Education";
 import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -23,6 +24,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <About />
+      <Education />
       <Projects />
       <Contact />
       <Footer />

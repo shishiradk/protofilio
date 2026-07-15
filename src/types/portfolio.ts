@@ -5,8 +5,9 @@ export interface PortfolioData {
   about: { title: string; name: string; description: string; intro: string };
   skills: { icon: string; title: string; desc: string }[];
   experience: { company: string; role: string; duration: string; desc: string }[];
+  education: { institution: string; degree: string; duration: string }[];
+  certifications: { title: string; issuer: string; year: string; id?: string }[];
   projects: { id: string; title: string; desc: string; tags: string[]; featured: boolean; demo: string; code: string }[];
-  socials: { linkedin: string; github: string; kaggle: string; twitter: string; instagram: string };
+  socials: { linkedin: string; github: string; upwork: string; kaggle: string; twitter: string; instagram: string };
   footer: { text: string; year: string };
-  adminPassword: string;
 }

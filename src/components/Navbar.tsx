@@ -36,7 +36,10 @@ export default function Navbar() {
     >
       <ul
         className={`list-none flex items-center
-          ${isVertical ? "flex-col gap-3 p-2" : "gap-4 md:gap-5"}`}
+          ${isVertical
+            ? "flex-col gap-3 p-2"
+            : "gap-2.5 sm:gap-4 md:gap-5 flex-wrap justify-end max-w-[calc(100vw-2rem)]"
+          }`}
       >
         {items.map((item) => (
           <li key={item.text}>
@@ -56,7 +59,7 @@ export default function Navbar() {
                 href={item.link}
                 onClick={(e) => handleClick(e, item.link)}
                 className="text-[var(--muted)] no-underline font-medium px-1 py-1
-                  text-sm transition-colors duration-200 hover:text-white"
+                  text-xs sm:text-sm transition-colors duration-200 hover:text-white"
               >
                 {item.text}
               </a>

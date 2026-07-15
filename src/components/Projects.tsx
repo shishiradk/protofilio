@@ -55,27 +55,31 @@ export default function Projects() {
                   </span>
                 ))}
               </div>
-              <div className="flex gap-3 items-center">
-                <a
-                  href={project.code}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 rounded-lg text-sm text-white no-underline
-                    border border-[var(--border)] font-medium
-                    transition-colors duration-200 hover:border-[#333]"
-                >
-                  Source Code
-                </a>
-                <a
-                  href={project.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 rounded-lg text-sm text-black no-underline
-                    bg-[var(--sky)] font-medium
-                    transition-opacity duration-200 hover:opacity-85"
-                >
-                  Live Demo
-                </a>
+              <div className="flex gap-3 items-center flex-wrap">
+                {project.code && (
+                  <a
+                    href={project.code}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded-lg text-sm text-white no-underline
+                      border border-[var(--border)] font-medium
+                      transition-colors duration-200 hover:border-[#333]"
+                  >
+                    Source Code
+                  </a>
+                )}
+                {project.demo && project.demo !== project.code && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded-lg text-sm text-black no-underline
+                      bg-[var(--sky)] font-medium
+                      transition-opacity duration-200 hover:opacity-85"
+                  >
+                    Live Demo
+                  </a>
+                )}
               </div>
             </article>
           ))}

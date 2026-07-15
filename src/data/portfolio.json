@@ -11,6 +11,11 @@
       "icon": "fa-user"
     },
     {
+      "text": "Education",
+      "link": "#education",
+      "icon": "fa-graduation-cap"
+    },
+    {
       "text": "Projects",
       "link": "#projects",
       "icon": "fa-briefcase"
@@ -22,8 +27,8 @@
     }
   ],
   "hero": {
-    "title": "AI/ML Enthusiast & Backend Developer",
-    "description": "Passionate about learning new technologies and building practical digital solutions focused on real-world impact.",
+    "title": "AI Engineer & LLM Systems Builder",
+    "description": "I build production RAG pipelines, computer-vision APIs, and LLM-powered backend services — using FastAPI, PyTorch, LangChain, and vector databases like FAISS and ChromaDB.",
     "cvLink": "/shishiradhikari.pdf",
     "blogLink": "https://medium.com/@shishiradhikari444",
     "image": "/AA.png"
@@ -37,39 +42,64 @@
   "about": {
     "title": "About Me",
     "name": "Shishir Adhikari",
-    "description": "Machine Learning and Backend Engineer specializing in AI systems, APIs and scalable platforms. Experienced in building RAG systems, NLP pipelines, data platforms and production-ready AI applications.",
-    "intro": "Responsible, disciplined, and polite individual with a positive attitude and strong learning ability. Able to adapt to different work environments and handle tasks with dedication and honesty."
+    "description": "I build the full pipeline: model development in PyTorch and Scikit-learn, vector search and semantic retrieval with FAISS, ChromaDB, and pgvector, LLM orchestration with LangChain and LangGraph, and production deployment with Docker. My work spans RAG assistants, Nepali/Devanagari OCR, and computer-vision face- and skin-analysis models — segmentation, detection with YOLO/RT-DETR, and ViT/DINOv2 classifiers. I also compete on Kaggle across computer-vision and NLP challenges to keep my modelling sharp.",
+    "intro": "AI Engineer building production machine learning systems — Retrieval-Augmented Generation (RAG), Large Language Models (LLMs), computer vision, and NLP — deployed as scalable REST APIs with FastAPI, Flask, and Django."
   },
   "skills": [
     {
       "icon": "fa-code",
       "title": "Python",
-      "desc": "Backend, AI systems, automation, APIs"
+      "desc": "AI systems, APIs, automation"
     },
     {
       "icon": "fa-server",
       "title": "FastAPI",
-      "desc": "High performance backend APIs"
+      "desc": "High-performance REST APIs"
     },
     {
       "icon": "fa-brain",
-      "title": "LangChain",
-      "desc": "LLM pipelines, RAG systems"
-    },
-    {
-      "icon": "fa-cloud",
-      "title": "AWS",
-      "desc": "S3, deployment, cloud systems"
+      "title": "LangChain / LangGraph",
+      "desc": "RAG, agents, LLM orchestration"
     },
     {
       "icon": "fa-database",
-      "title": "PostgreSQL",
-      "desc": "Relational DB, pgvector"
+      "title": "Vector Databases",
+      "desc": "FAISS, ChromaDB, Pinecone, pgvector"
+    },
+    {
+      "icon": "fa-fire",
+      "title": "PyTorch",
+      "desc": "Model training & fine-tuning"
+    },
+    {
+      "icon": "fa-object-group",
+      "title": "Computer Vision",
+      "desc": "Detection (YOLO/RT-DETR), segmentation, ViT"
+    },
+    {
+      "icon": "fa-comment-dots",
+      "title": "NLP / Transformers",
+      "desc": "Fine-tuning, sentiment & text classification"
+    },
+    {
+      "icon": "fa-eye",
+      "title": "OpenCV / MediaPipe",
+      "desc": "Vision pipelines & landmarks"
+    },
+    {
+      "icon": "fa-robot",
+      "title": "OpenAI / Gemini API",
+      "desc": "LLM integration & prompt engineering"
+    },
+    {
+      "icon": "fa-layer-group",
+      "title": "PostgreSQL / MongoDB",
+      "desc": "Relational & document databases"
     },
     {
       "icon": "fa-memory",
       "title": "Redis",
-      "desc": "Caching, sessions, RedisJSON"
+      "desc": "Caching, sessions, real-time"
     },
     {
       "icon": "fa-box",
@@ -77,53 +107,66 @@
       "desc": "Containerization & deployment"
     },
     {
-      "icon": "fa-robot",
-      "title": "Machine Learning",
-      "desc": "Model training & pipelines"
+      "icon": "fa-cloud",
+      "title": "AWS / Cloudflare",
+      "desc": "Cloud deployment, Workers, S3"
     },
     {
-      "icon": "fa-network-wired",
-      "title": "RAG Systems",
-      "desc": "Semantic search systems"
-    },
-    {
-      "icon": "fa-diagram-project",
-      "title": "System Design",
-      "desc": "Scalable architectures"
+      "icon": "fa-cubes",
+      "title": "HuggingFace",
+      "desc": "Models, embeddings, transformers"
     }
   ],
   "experience": [
     {
-      "company": "Tech Startups",
-      "role": "AI Engineer Intern",
-      "duration": "2024 - Present",
-      "desc": "Building RAG systems and optimizing NLP pipelines."
+      "company": "Nep Tech Pal",
+      "role": "AI/ML Engineer Intern",
+      "duration": "Nov 2025 – Apr 2026",
+      "desc": "Developed and deployed production REST APIs (FastAPI, Flask, Django) serving AI-powered products to real users. Built computer-vision face- and skin-analysis pipelines — face-shape detection plus skin models for acne severity (DINOv2), detection (YOLO/RT-DETR), wrinkle segmentation (U-Net++/EfficientNetV2), and age estimation (ViT). Engineered OCR systems including Nepali-language text extraction, a real-time facial emotion-recognition system (ViT + OpenCV, 8 classes), and an AI property-search system. Improved backend reliability with structured logging, error handling, and async optimization."
+    }
+  ],
+  "education": [
+    {
+      "institution": "Tribhuvan University (IOST)",
+      "degree": "BSc Computer Science & Information Technology (CSIT)",
+      "duration": "2022 – 2026"
+    }
+  ],
+  "certifications": [
+    {
+      "title": "Complete Generative AI with LangChain and HuggingFace",
+      "issuer": "Udemy",
+      "year": "2024",
+      "id": "UC-2b2a53d7-1b67-46c7-bc74-00f917e9b045"
     }
   ],
   "projects": [
     {
       "id": "p1",
-      "title": "Content Summarization System",
-      "desc": "AI system to summarize PDFs, YouTube transcripts and long documents using LLMs.",
+      "title": "Face Shape Analyser",
+      "desc": "Real-time computer-vision API classifying faces into 5 shapes at 85% accuracy (PyTorch + MediaPipe). Dual-LLM fallback (OpenAI GPT + Google Gemini) for 100% uptime, with Swagger docs, API-key auth, and gender detection driving hairstyle & beard recommendations.",
       "tags": [
-        "Python",
-        "LangChain",
-        "Streamlit",
-        "NLP"
+        "Flask",
+        "PyTorch",
+        "MediaPipe",
+        "OpenAI",
+        "Gemini",
+        "Computer Vision"
       ],
       "featured": true,
-      "demo": "https://github.com/shishiradk/content-summerizaton/blob/main/app.py",
-      "code": "https://github.com/shishiradk/content-summerizaton"
+      "demo": "https://github.com/shishiradk",
+      "code": "https://github.com/shishiradk"
     },
     {
       "id": "p2",
       "title": "Shikshya Chautari",
-      "desc": "AI-powered platform for transcript summarization and document processing.",
+      "desc": "RAG exam-question forecasting system (LangChain + FAISS) over 1,000+ pages on AWS S3 — 0.827 BERTScore F1, 89.3% syllabus precision across 44 held-out papers, sub-1.5s responses, and a 2.8% hallucination rate.",
       "tags": [
-        "AI",
-        "LLM",
-        "Streamlit",
-        "NLP"
+        "FastAPI",
+        "LangChain",
+        "FAISS",
+        "AWS S3",
+        "RAG"
       ],
       "featured": true,
       "demo": "https://github.com/shishiradk/shikshychautari-baseversion",
@@ -131,56 +174,103 @@
     },
     {
       "id": "p3",
-      "title": "Student Performance Analysis",
-      "desc": "Data analytics system for student performance visualization.",
+      "title": "Nepal Parichaya",
+      "desc": "Multilingual RAG assistant over Nepali source material — Google Document AI OCR (43 pages → 950+ semantic chunks) with hybrid ChromaDB vector search + Devanagari keyword boosting. Recall@5 of 0.80, 4.10/5 answer correctness, 100% out-of-scope refusal; Streamlit + Django REST API on Hugging Face Spaces.",
       "tags": [
-        "Python",
+        "Django",
+        "ChromaDB",
+        "Google Document AI",
+        "RAG",
+        "Streamlit"
+      ],
+      "featured": true,
+      "demo": "https://github.com/shishiradk/Nepal-parichaya",
+      "code": "https://github.com/shishiradk/Nepal-parichaya"
+    },
+    {
+      "id": "p4",
+      "title": "Conversational-RAG API",
+      "desc": "Production conversational-AI backend with Redis-backed session memory (<50ms retrieval) and ~1.2s end-to-end responses, built on FastAPI + LangChain with GPT for multi-turn, context-aware answers.",
+      "tags": [
+        "FastAPI",
+        "Redis",
+        "GPT",
+        "RAG",
+        "LangChain"
+      ],
+      "featured": true,
+      "demo": "https://github.com/shishiradk/Conversational-RAG-API",
+      "code": "https://github.com/shishiradk/Conversational-RAG-API"
+    },
+    {
+      "id": "p5",
+      "title": "RAG with PostgreSQL",
+      "desc": "Scalable RAG pipeline using pgvector embeddings and FastAPI for low-latency semantic search and question answering over document collections.",
+      "tags": [
+        "FastAPI",
+        "PostgreSQL",
+        "pgvector",
+        "LangChain",
+        "OpenAI"
+      ],
+      "featured": true,
+      "demo": "https://github.com/shishiradk/RAG-with-PostgreSQL",
+      "code": "https://github.com/shishiradk/RAG-with-PostgreSQL"
+    },
+    {
+      "id": "p6",
+      "title": "Nepali Sentiment & Hate-Speech Classifier",
+      "desc": "Fine-tuned transformer models for Nepali sentiment analysis and hate-speech detection, tackling class imbalance in a low-resource language with focal loss. Built and trained end-to-end on Kaggle.",
+      "tags": [
+        "PyTorch",
+        "Transformers",
+        "NLP",
+        "Kaggle"
+      ],
+      "featured": false,
+      "demo": "https://www.kaggle.com/shishiradhikari11",
+      "code": "https://www.kaggle.com/shishiradhikari11"
+    },
+    {
+      "id": "p7",
+      "title": "Smart Property Search",
+      "desc": "AI-powered property-search system retrieving listings by user preferences (price, location, features) with hybrid vector + geospatial scoring, deployed on Cloudflare Workers.",
+      "tags": [
+        "TypeScript",
+        "Cloudflare Workers",
+        "MySQL",
+        "RAG",
+        "Workers AI"
+      ],
+      "featured": false,
+      "demo": "https://github.com/shishiradk/sorha-aana",
+      "code": "https://github.com/shishiradk/sorha-aana"
+    },
+    {
+      "id": "p8",
+      "title": "Student Performance Analysis",
+      "desc": "Data-analytics platform analyzing 1,000 student records with automated insights and visualizations to support educators' decision-making.",
+      "tags": [
+        "Flask",
         "Streamlit",
+        "Python",
         "Data Science"
       ],
       "featured": false,
       "demo": "https://github.com/shishiradk/student-performance",
       "code": "https://github.com/shishiradk/student-performance"
-    },
-    {
-      "id": "p4",
-      "title": "RAG with PostgreSQL",
-      "desc": "Scalable RAG system using pgvector, FastAPI and LLMs.",
-      "tags": [
-        "RAG",
-        "PostgreSQL",
-        "FastAPI",
-        "LLM"
-      ],
-      "featured": false,
-      "demo": "https://github.com/shishiradk/RAG-with-PostgreSQL",
-      "code": "https://github.com/shishiradk/RAG-with-PostgreSQL"
-    },
-    {
-      "id": "p5",
-      "title": "Conversational-RAG API",
-      "desc": "Production-ready conversational AI backend with booking system.",
-      "tags": [
-        "FastAPI",
-        "Redis",
-        "GPT",
-        "RAG"
-      ],
-      "featured": false,
-      "demo": "https://github.com/shishiradk/Conversational-RAG-API",
-      "code": "https://github.com/shishiradk/Conversational-RAG-API"
     }
   ],
   "socials": {
-    "linkedin": "https://www.linkedin.com/in/shishir-adhikari-b36473327/",
+    "linkedin": "https://www.linkedin.com/in/shishiradhikari-b36473327/",
     "github": "https://github.com/shishiradk",
+    "upwork": "https://www.upwork.com/freelancers/~013b5c65a55e050fda",
     "kaggle": "https://www.kaggle.com/shishiradhikari11",
     "twitter": "",
     "instagram": "https://www.instagram.com/shishiradk/"
   },
   "footer": {
     "text": "SHISHIRADHIKARI",
-    "year": "2025"
-  },
-  "adminPassword": "shishir@admin"
+    "year": "2026"
+  }
 }

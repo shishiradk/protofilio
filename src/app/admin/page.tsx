@@ -8,12 +8,6 @@ export default function AdminPanel() {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
-  const [forgotMode, setForgotMode] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [generatedOtp, setGeneratedOtp] = useState("");
-  const [sendingOtp, setSendingOtp] = useState(false);
-  const [forgotMsg, setForgotMsg] = useState("");
 
   const [activeTab, setActiveTab] = useState("hero");
   const [data, setData] = useState<PortfolioData | null>(null);
@@ -44,16 +38,49 @@ export default function AdminPanel() {
   const [pDesc, setPDesc] = useState("");
   const [pFeatured, setPFeatured] = useState(false);
 
+  const [eduInstitution, setEduInstitution] = useState("");
+  const [eduDegree, setEduDegree] = useState("");
+  const [eduDuration, setEduDuration] = useState("");
+
+  const [certTitle, setCertTitle] = useState("");
+  const [certIssuer, setCertIssuer] = useState("");
+  const [certYear, setCertYear] = useState("");
+  const [certId, setCertId] = useState("");
+
   const tabs = [
     { id: "hero", label: "Hero / Home" },
     { id: "hire", label: "Hire Box" },
     { id: "about", label: "About" },
     { id: "skills", label: "Skills" },
+    { id: "education", label: "Education" },
     { id: "projects", label: "Projects" },
     { id: "socials", label: "Socials" },
     { id: "navbar", label: "Navbar" },
     { id: "general", label: "General" },
   ];
+
+  const login = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoggingIn(true);
+    setLoginError("");
+    try {
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      const json = await res.json();
+      if (json.ok) {
+        setAuthed(true);
+        setPassword("");
+      } else {
+        setLoginError(json.error || "Wrong password");
+      }
+    } catch {
+      setLoginError("Network error. Try again.");
+    }
+    setLoggingIn(false);
+  };
 
   const save = async (d: PortfolioData) => {
     setSaving(true);
@@ -67,6 +94,9 @@ export default function AdminPanel() {
       const json = await res.json();
       if (json.ok) {
         setToast("Saved successfully!");
+      } else if (res.status === 401) {
+        setToast("Session expired — please log in again.");
+        setAuthed(false);
       } else {
         setToast("Error saving: " + (json.error || "Unknown error"));
       }
@@ -93,185 +123,79 @@ export default function AdminPanel() {
       <div style={{
         minHeight: "100vh", background: "#0a0a0a", display: "flex",
         alignItems: "center", justifyContent: "center", fontFamily: "'Poppins', sans-serif",
+        padding: 16,
       }}>
         <div style={{
             background: "#111", border: "1px solid #1a1a1a", borderRadius: 12,
-            padding: "40px 36px", width: 380, textAlign: "center",
+            padding: "40px 36px", width: 380, maxWidth: "100%", textAlign: "center",
           }}>
           <div style={{
             width: 48, height: 48, background: "#38bdf8", borderRadius: "50%",
             margin: "0 auto 20px", display: "flex", alignItems: "center", justifyContent: "center",
           }}>
-            <span style={{ fontSize: 22 }}>{forgotMode ? "\u2709" : "\uD83D\uDD12"}</span>
+            <span style={{ fontSize: 22 }}>{"🔒"}</span>
           </div>
 
-          {!forgotMode ? (
-            /* --- LOGIN --- */
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              setLoggingIn(true);
-              setLoginError("");
-              if (password === data.adminPassword) {
-                setAuthed(true);
-              } else {
-                setLoginError("Wrong password");
-              }
-              setLoggingIn(false);
-            }}>
-              <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Admin Access</h2>
-              <p style={{ color: "#888", fontSize: 14, marginBottom: 24 }}>Enter password to continue</p>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                autoFocus
-                style={{
-                  width: "100%", padding: "12px 16px", background: "#0a0a0a",
-                  border: loginError ? "1px solid #ef4444" : "1px solid #1a1a1a",
-                  borderRadius: 8, color: "#fff", fontSize: 14, outline: "none",
-                  boxSizing: "border-box", marginBottom: 8,
-                }}
-              />
-              {loginError && (
-                <p style={{ color: "#ef4444", fontSize: 13, marginBottom: 8, textAlign: "left" }}>{loginError}</p>
-              )}
-              <button
-                type="submit"
-                disabled={loggingIn}
-                style={{
-                  width: "100%", padding: "12px 0", background: "#38bdf8", color: "#000",
-                  border: "none", borderRadius: 8, fontWeight: 600, fontSize: 14,
-                  cursor: loggingIn ? "wait" : "pointer", marginTop: 8,
-                  opacity: loggingIn ? 0.6 : 1,
-                }}
-              >
-                {loggingIn ? "Verifying..." : "Login"}
-              </button>
-              <p
-                onClick={() => { setForgotMode(true); setLoginError(""); setOtpSent(false); setForgotMsg(""); }}
-                style={{ color: "#38bdf8", fontSize: 13, marginTop: 16, cursor: "pointer" }}
-              >
-                Forgot password?
-              </p>
-            </form>
-          ) : !otpSent ? (
-            /* --- SEND OTP --- */
-            <div>
-              <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Reset Password</h2>
-              <p style={{ color: "#888", fontSize: 14, marginBottom: 24 }}>
-                A verification code will be sent to your email
-              </p>
-              <p style={{ color: "#555", fontSize: 13, marginBottom: 16 }}>
-                s****r.adhikari119@gmail.com
-              </p>
-              {forgotMsg && (
-                <p style={{ color: "#ef4444", fontSize: 13, marginBottom: 8 }}>{forgotMsg}</p>
-              )}
-              <button
-                disabled={sendingOtp}
-                onClick={async () => {
-                  setSendingOtp(true);
-                  setForgotMsg("");
-                  const code = Math.floor(100000 + Math.random() * 900000).toString();
-                  setGeneratedOtp(code);
-                  try {
-                    const emailjs = await import("@emailjs/browser");
-                    await emailjs.send("shishiradk", "shishira", {
-                      from_name: "Portfolio Admin",
-                      from_email: "noreply@portfolio.com",
-                      message: `Your admin verification code is: ${code}`,
-                      to_email: "shishir.adhikari119@gmail.com",
-                    }, "UHpytVLyxh82_ayhq");
-                    setOtpSent(true);
-                  } catch {
-                    setForgotMsg("Failed to send code. Try again.");
-                  }
-                  setSendingOtp(false);
-                }}
-                style={{
-                  width: "100%", padding: "12px 0", background: "#38bdf8", color: "#000",
-                  border: "none", borderRadius: 8, fontWeight: 600, fontSize: 14,
-                  cursor: sendingOtp ? "wait" : "pointer", opacity: sendingOtp ? 0.6 : 1,
-                }}
-              >
-                {sendingOtp ? "Sending..." : "Send Verification Code"}
-              </button>
-              <p
-                onClick={() => { setForgotMode(false); setForgotMsg(""); }}
-                style={{ color: "#888", fontSize: 13, marginTop: 16, cursor: "pointer" }}
-              >
-                Back to login
-              </p>
-            </div>
-          ) : (
-            /* --- VERIFY OTP --- */
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              if (otp === generatedOtp) {
-                setAuthed(true);
-                setForgotMode(false);
-              } else {
-                setForgotMsg("Invalid code. Try again.");
-              }
-            }}>
-              <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Enter Code</h2>
-              <p style={{ color: "#888", fontSize: 14, marginBottom: 24 }}>
-                Check your email for the 6-digit code
-              </p>
-              <input
-                type="text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                placeholder="000000"
-                maxLength={6}
-                autoFocus
-                style={{
-                  width: "100%", padding: "12px 16px", background: "#0a0a0a",
-                  border: "1px solid #1a1a1a", borderRadius: 8, color: "#fff",
-                  fontSize: 20, outline: "none", boxSizing: "border-box",
-                  textAlign: "center", letterSpacing: 8, marginBottom: 8,
-                }}
-              />
-              {forgotMsg && (
-                <p style={{ color: "#ef4444", fontSize: 13, marginBottom: 8 }}>{forgotMsg}</p>
-              )}
-              <button
-                type="submit"
-                style={{
-                  width: "100%", padding: "12px 0", background: "#38bdf8", color: "#000",
-                  border: "none", borderRadius: 8, fontWeight: 600, fontSize: 14,
-                  cursor: "pointer", marginTop: 8,
-                }}
-              >
-                Verify & Login
-              </button>
-              <p
-                onClick={() => { setOtpSent(false); setOtp(""); setForgotMsg(""); }}
-                style={{ color: "#888", fontSize: 13, marginTop: 16, cursor: "pointer" }}
-              >
-                Resend code
-              </p>
-            </form>
-          )}
+          <form onSubmit={login}>
+            <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Admin Access</h2>
+            <p style={{ color: "#888", fontSize: 14, marginBottom: 24 }}>Enter password to continue</p>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              autoFocus
+              style={{
+                width: "100%", padding: "12px 16px", background: "#0a0a0a",
+                border: loginError ? "1px solid #ef4444" : "1px solid #1a1a1a",
+                borderRadius: 8, color: "#fff", fontSize: 14, outline: "none",
+                boxSizing: "border-box", marginBottom: 8,
+              }}
+            />
+            {loginError && (
+              <p style={{ color: "#ef4444", fontSize: 13, marginBottom: 8, textAlign: "left" }}>{loginError}</p>
+            )}
+            <button
+              type="submit"
+              disabled={loggingIn}
+              style={{
+                width: "100%", padding: "12px 0", background: "#38bdf8", color: "#000",
+                border: "none", borderRadius: 8, fontWeight: 600, fontSize: 14,
+                cursor: loggingIn ? "wait" : "pointer", marginTop: 8,
+                opacity: loggingIn ? 0.6 : 1,
+              }}
+            >
+              {loggingIn ? "Verifying..." : "Login"}
+            </button>
+          </form>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: "#0a0a0a", color: "#e5e5e5", fontFamily: "'Poppins', sans-serif" }}>
-      {/* Sidebar */}
-      <aside style={{ width: 250, background: "#111", borderRight: "1px solid #1a1a1a", padding: "24px 20px", flexShrink: 0, overflowY: "auto" }}>
-        <h2 style={{ color: "#fff", fontSize: 18, fontWeight: 700, marginBottom: 28, display: "flex", alignItems: "center", gap: 10 }}>
+    <div
+      className="flex flex-col md:flex-row h-screen overflow-hidden"
+      style={{ background: "#0a0a0a", color: "#e5e5e5", fontFamily: "'Poppins', sans-serif" }}
+    >
+      {/* Sidebar (top bar on mobile) */}
+      <aside
+        className="w-full md:w-[250px] flex-shrink-0 border-b md:border-b-0 md:border-r
+          border-[#1a1a1a] bg-[#111] p-3 md:p-5 md:overflow-y-auto"
+      >
+        <h2 className="hidden md:flex" style={{ color: "#fff", fontSize: 18, fontWeight: 700, marginBottom: 28, alignItems: "center", gap: 10 }}>
           <span style={{ width: 10, height: 10, background: "#38bdf8", borderRadius: "50%", display: "inline-block" }} />
           CMS Panel
         </h2>
-        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+        <ul
+          className="flex md:block overflow-x-auto md:overflow-x-visible gap-1"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
           {tabs.map((tab) => (
             <li
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
+              className="whitespace-nowrap"
               style={{
                 padding: "10px 12px",
                 marginBottom: 4,
@@ -291,7 +215,7 @@ export default function AdminPanel() {
       </aside>
 
       {/* Main */}
-      <main style={{ flex: 1, padding: "40px 56px", overflowY: "auto", background: "#0a0a0a" }}>
+      <main className="flex-1 overflow-y-auto bg-[#0a0a0a] px-5 py-6 md:px-14 md:py-10">
         <div style={{ maxWidth: 680, margin: "0 auto" }}>
 
           {/* HERO */}
@@ -395,6 +319,46 @@ export default function AdminPanel() {
             </div>
           )}
 
+          {/* EDUCATION & CERTIFICATIONS */}
+          {activeTab === "education" && (
+            <div>
+              <SectionTitle>Education</SectionTitle>
+              {data.education.map((edu, i) => (
+                <ListItem key={i} title={edu.degree} sub={`${edu.institution} · ${edu.duration}`}
+                  onDelete={() => setData({ ...data, education: data.education.filter((_, idx) => idx !== i) })} />
+              ))}
+              <div style={{ marginTop: 12 }}>
+                <Input value={eduDegree} onChange={setEduDegree} placeholder="Degree (e.g. BSc CSIT)" />
+                <Input value={eduInstitution} onChange={setEduInstitution} placeholder="Institution" />
+                <Input value={eduDuration} onChange={setEduDuration} placeholder="Duration (e.g. 2022 – 2026)" />
+                <AddBtn onClick={() => {
+                  if (!eduDegree) return;
+                  setData({ ...data, education: [...data.education, { degree: eduDegree, institution: eduInstitution, duration: eduDuration }] });
+                  setEduDegree(""); setEduInstitution(""); setEduDuration("");
+                }}>+ Add Education</AddBtn>
+              </div>
+
+              <Divider />
+              <SubTitle>Certifications</SubTitle>
+              {data.certifications.map((cert, i) => (
+                <ListItem key={i} title={cert.title} sub={`${cert.issuer} · ${cert.year}`}
+                  onDelete={() => setData({ ...data, certifications: data.certifications.filter((_, idx) => idx !== i) })} />
+              ))}
+              <div style={{ marginTop: 12 }}>
+                <Input value={certTitle} onChange={setCertTitle} placeholder="Certificate title" />
+                <Input value={certIssuer} onChange={setCertIssuer} placeholder="Issuer (e.g. Udemy)" />
+                <Input value={certYear} onChange={setCertYear} placeholder="Year" />
+                <Input value={certId} onChange={setCertId} placeholder="Credential ID (optional)" />
+                <AddBtn onClick={() => {
+                  if (!certTitle) return;
+                  setData({ ...data, certifications: [...data.certifications, { title: certTitle, issuer: certIssuer, year: certYear, ...(certId ? { id: certId } : {}) }] });
+                  setCertTitle(""); setCertIssuer(""); setCertYear(""); setCertId("");
+                }}>+ Add Certification</AddBtn>
+              </div>
+              <SaveBtn saving={saving} onClick={() => save(data)} />
+            </div>
+          )}
+
           {/* PROJECTS */}
           {activeTab === "projects" && (
             <div>
@@ -428,7 +392,7 @@ export default function AdminPanel() {
           {activeTab === "socials" && (
             <div>
               <SectionTitle>Social Links</SectionTitle>
-              {(["linkedin", "github", "kaggle", "twitter", "instagram"] as const).map((key) => (
+              {(["linkedin", "github", "upwork", "kaggle", "twitter", "instagram"] as const).map((key) => (
                 <div key={key}>
                   <Label>{key.charAt(0).toUpperCase() + key.slice(1)}</Label>
                   <Input value={data.socials[key]} onChange={(v) => setData({ ...data, socials: { ...data.socials, [key]: v } })} placeholder={`https://${key}.com/...`} />
@@ -444,7 +408,7 @@ export default function AdminPanel() {
               <SectionTitle>Navbar Links</SectionTitle>
               {data.navbar.map((item, i) => (
                 <div key={i} style={{ background: "#111", border: "1px solid #1a1a1a", borderRadius: 8, padding: 16, marginBottom: 12 }}>
-                  <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+                  <div className="flex flex-col sm:flex-row" style={{ gap: 8, marginBottom: 8 }}>
                     <input
                       value={item.text}
                       onChange={(e) => {
@@ -492,8 +456,10 @@ export default function AdminPanel() {
               <Input value={data.footer.year} onChange={(v) => setData({ ...data, footer: { ...data.footer, year: v } })} />
               <Divider />
               <SubTitle>Admin Password</SubTitle>
-              <Input value={data.adminPassword} onChange={(v) => setData({ ...data, adminPassword: v })} placeholder="Admin password" />
-              <p style={{ color: "#888", fontSize: 12, marginTop: 6 }}>Change your admin password here. Save to apply.</p>
+              <p style={{ color: "#888", fontSize: 13, lineHeight: 1.6 }}>
+                The admin password is managed through the <code style={{ color: "#38bdf8" }}>ADMIN_PASSWORD</code> environment
+                variable (Vercel → Project Settings → Environment Variables). It is never stored in the site data.
+              </p>
               <SaveBtn saving={saving} onClick={() => save(data)} />
             </div>
           )}
@@ -607,9 +573,9 @@ function ListItem({ title, sub, onDelete }: { title: string; sub: string; onDele
   return (
     <div style={{
       background: "#111", border: "1px solid #1a1a1a", padding: 16, borderRadius: 8,
-      marginBottom: 10, display: "flex", justifyContent: "space-between", alignItems: "center",
+      marginBottom: 10, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12,
     }}>
-      <div>
+      <div style={{ minWidth: 0 }}>
         <b style={{ color: "#fff", fontSize: 14, display: "block", marginBottom: 2 }}>{title}</b>
         <span style={{ color: "#888", fontSize: 12 }}>{sub}</span>
       </div>
@@ -617,7 +583,7 @@ function ListItem({ title, sub, onDelete }: { title: string; sub: string; onDele
         onClick={onDelete}
         style={{
           background: "transparent", color: "#ef4444", padding: "6px 12px", border: "1px solid rgba(239,68,68,0.2)",
-          borderRadius: 8, cursor: "pointer", fontSize: 13,
+          borderRadius: 8, cursor: "pointer", fontSize: 13, flexShrink: 0,
         }}
       >
         Delete
@@ -629,9 +595,11 @@ function ListItem({ title, sub, onDelete }: { title: string; sub: string; onDele
 function FileUpload({ accept, current, onUploaded }: { accept: string; current: string; onUploaded: (path: string) => void }) {
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [error, setError] = useState("");
 
   const upload = async (file: File) => {
     setUploading(true);
+    setError("");
     try {
       const form = new FormData();
       form.append("file", file);
@@ -639,9 +607,11 @@ function FileUpload({ accept, current, onUploaded }: { accept: string; current: 
       const json = await res.json();
       if (json.ok) {
         onUploaded(json.path);
+      } else {
+        setError(json.error || "Upload failed");
       }
     } catch {
-      // ignore
+      setError("Upload failed. Try again.");
     }
     setUploading(false);
   };
@@ -661,6 +631,7 @@ function FileUpload({ accept, current, onUploaded }: { accept: string; current: 
       {current && (
         <div style={{ marginBottom: 8 }}>
           {isImage ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={current}
               alt="Current"
@@ -700,13 +671,12 @@ function FileUpload({ accept, current, onUploaded }: { accept: string; current: 
         {uploading ? (
           <span style={{ color: "#38bdf8", fontSize: 14 }}>Uploading...</span>
         ) : (
-          <>
-            <span style={{ color: "#888", fontSize: 14 }}>
-              {isImage ? "Drop image here or click to browse" : "Drop PDF here or click to browse"}
-            </span>
-          </>
+          <span style={{ color: "#888", fontSize: 14 }}>
+            {isImage ? "Drop image here or click to browse" : "Drop PDF here or click to browse"}
+          </span>
         )}
       </div>
+      {error && <p style={{ color: "#ef4444", fontSize: 13, marginTop: 6 }}>{error}</p>}
     </div>
   );
 }
