@@ -46,6 +46,7 @@ export default function AdminPanel() {
   const [certIssuer, setCertIssuer] = useState("");
   const [certYear, setCertYear] = useState("");
   const [certId, setCertId] = useState("");
+  const [certUrl, setCertUrl] = useState("");
 
   const tabs = [
     { id: "hero", label: "Hero / Home" },
@@ -349,10 +350,11 @@ export default function AdminPanel() {
                 <Input value={certIssuer} onChange={setCertIssuer} placeholder="Issuer (e.g. Udemy)" />
                 <Input value={certYear} onChange={setCertYear} placeholder="Year" />
                 <Input value={certId} onChange={setCertId} placeholder="Credential ID (optional)" />
+                <Input value={certUrl} onChange={setCertUrl} placeholder="Verification link (optional, e.g. https://www.udemy.com/certificate/...)" />
                 <AddBtn onClick={() => {
                   if (!certTitle) return;
-                  setData({ ...data, certifications: [...data.certifications, { title: certTitle, issuer: certIssuer, year: certYear, ...(certId ? { id: certId } : {}) }] });
-                  setCertTitle(""); setCertIssuer(""); setCertYear(""); setCertId("");
+                  setData({ ...data, certifications: [...data.certifications, { title: certTitle, issuer: certIssuer, year: certYear, ...(certId ? { id: certId } : {}), ...(certUrl ? { url: certUrl } : {}) }] });
+                  setCertTitle(""); setCertIssuer(""); setCertYear(""); setCertId(""); setCertUrl("");
                 }}>+ Add Certification</AddBtn>
               </div>
               <SaveBtn saving={saving} onClick={() => save(data)} />

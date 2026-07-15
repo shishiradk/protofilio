@@ -47,6 +47,17 @@ export default function Education() {
                   ID: {cert.id}
                 </p>
               )}
+              {cert.url && (
+                <a
+                  href={cert.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-xs text-[var(--sky)] no-underline mt-2
+                    hover:underline"
+                >
+                  View Certificate &rarr;
+                </a>
+              )}
             </div>
           ))}
         </div>
